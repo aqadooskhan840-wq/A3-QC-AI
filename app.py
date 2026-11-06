@@ -79,14 +79,8 @@ if not api_key:
 else:
     genai.configure(api_key=api_key)
     
-    # Automatically find a supported model from your API key
-    try:
-        available_models = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
-        # Pick flash or pro model automatically
-        selected_model_name = next((m for m in available_models if 'flash' in m), available_models[0])
-        model = genai.GenerativeModel(selected_model_name)
-    except Exception:
-        model = genai.GenerativeModel('gemini-1.5-flash')
+    # Updated to gemini-3.8-flash model as required by Google AI Studio
+    model = genai.GenerativeModel('gemini-3.8-flash')
 
     # =========================================================
     # CHAT SECTION: "Where should we start?"
