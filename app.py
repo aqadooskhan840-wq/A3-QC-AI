@@ -7,13 +7,10 @@ st.set_page_config(page_title="A3 QC AI Platform", page_icon="⚡", layout="wide
 # Professional Dark Theme Styling with Enhanced Radio Button Visibility
 st.markdown("""
 <style>
-    /* Entire App Background & Text Color */
     .stApp {
         background-color: #0B0F19;
         color: #F8FAFC;
     }
-    
-    /* Main Headings */
     .main-title { 
         text-align: center; 
         color: #38BDF8; 
@@ -28,8 +25,6 @@ st.markdown("""
         margin-bottom: 20px; 
         font-weight: 500; 
     }
-    
-    /* Project Card */
     .project-card { 
         background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%); 
         color: #F8FAFC; 
@@ -40,8 +35,6 @@ st.markdown("""
         box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); 
     }
     .project-card h4 { color: #60A5FA; margin-bottom: 8px; }
-    
-    /* Module Headers */
     .module-header { 
         font-size: 1.6rem; 
         font-weight: 700; 
@@ -50,14 +43,10 @@ st.markdown("""
         border-bottom: 2px solid #334155; 
         padding-bottom: 8px; 
     }
-
-    /* Fix text colors and sizes for inputs and labels in dark mode */
     .stTextInput label, .stSelectbox label, .stSlider label, .stNumberInput label, .stTextArea label, .stFileUploader label {
         color: #E2E8F0 !important;
         font-size: 1.05rem !important;
     }
-
-    /* Make Radio Options Prominent and Larger */
     .stRadio label p, .stRadio div[data-testid="stMarkdownContainer"] p {
         color: #FFFFFF !important;
         font-size: 1.15rem !important;
@@ -89,7 +78,15 @@ if not api_key:
     st.warning("⚠️ Please enter your free **Gemini API Key** in the sidebar to activate all AI modules and the chat assistant.")
 else:
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    
+    # Automatically find a supported model from your API key
+    try:
+        available_models = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
+        # Pick flash or pro model automatically
+        selected_model_name = next((m for m in available_models if 'flash' in m), available_models[0])
+        model = genai.GenerativeModel(selected_model_name)
+    except Exception:
+        model = genai.GenerativeModel('gemini-1.5-flash')
 
     # =========================================================
     # CHAT SECTION: "Where should we start?"
