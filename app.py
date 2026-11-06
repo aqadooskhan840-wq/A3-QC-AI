@@ -86,10 +86,9 @@ st.sidebar.header("⚙️ System Configuration")
 api_key = st.sidebar.text_input("Enter Gemini API Key:", type="password")
 
 if not api_key:
-    st.warning("⚠️ Please enter your free **Gemini API Key** in the sidebar to activate all AI modules.")
+    st.warning("⚠️ Please enter your free **Gemini API Key** in the sidebar to activate all AI modules and the chat assistant.")
 else:
     genai.configure(api_key=api_key)
-    # Using the standard stable gemini-1.5-flash model
     model = genai.GenerativeModel('gemini-1.5-flash')
 
     # =========================================================
