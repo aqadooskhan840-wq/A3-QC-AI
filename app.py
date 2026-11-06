@@ -4,7 +4,7 @@ import google.generativeai as genai
 # Page Config
 st.set_page_config(page_title="A3 QC AI Platform", page_icon="⚡", layout="wide")
 
-# Professional Dark Theme Styling for the Entire App
+# Professional Dark Theme Styling with Enhanced Radio Button Visibility
 st.markdown("""
 <style>
     /* Entire App Background & Text Color */
@@ -51,9 +51,17 @@ st.markdown("""
         padding-bottom: 8px; 
     }
 
-    /* Fix text colors for inputs and labels in dark mode */
+    /* Fix text colors and sizes for inputs and labels in dark mode */
     .stTextInput label, .stSelectbox label, .stSlider label, .stNumberInput label, .stTextArea label, .stFileUploader label {
         color: #E2E8F0 !important;
+        font-size: 1.05rem !important;
+    }
+
+    /* Make Radio Options Prominent and Larger */
+    .stRadio label p, .stRadio div[data-testid="stMarkdownContainer"] p {
+        color: #FFFFFF !important;
+        font-size: 1.15rem !important;
+        font-weight: 600 !important;
     }
 </style>
 """, unsafe_allow_html=True)
