@@ -2,15 +2,17 @@ import streamlit as st
 import google.generativeai as genai
 
 # Page Config
-st.set_page_config(page_title="A3 QC AI Platform", page_icon="🎓", layout="wide")
+st.set_page_config(page_title="A3 QC AI Platform", page_icon="⚡", layout="wide")
 
-# Styling
+# Professional Theme Styling (Dark Sidebar, Clean Tech Look, Accent Colors)
 st.markdown("""
 <style>
-    .main-title { text-align: center; color: #1E3A8A; font-size: 2.5rem; font-weight: bold; margin-bottom: 5px; }
-    .sub-title { text-align: center; color: #4B5563; font-size: 1.1rem; margin-bottom: 25px; }
-    .project-card { background-color: #F3F4F6; padding: 15px; border-radius: 10px; border-left: 5px solid #2563EB; margin-bottom: 20px; }
-    .module-header { font-size: 1.5rem; font-weight: bold; color: #1F2937; margin-bottom: 10px; }
+    .main-title { text-align: center; color: #0F172A; font-size: 2.8rem; font-weight: 800; margin-bottom: 2px; }
+    .sub-title { text-align: center; color: #475569; font-size: 1.15rem; margin-bottom: 20px; font-weight: 500; }
+    .project-card { background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%); color: #F8FAFC; padding: 20px; border-radius: 12px; border-left: 6px solid #3B82F6; margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+    .project-card h4 { color: #60A5FA; margin-bottom: 8px; }
+    .module-header { font-size: 1.6rem; font-weight: 700; color: #1E293B; margin-bottom: 12px; border-bottom: 2px solid #E2E8F0; padding-bottom: 8px; }
+    .chat-container { background-color: #F8FAFC; border: 1px solid #CBD5E1; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -30,18 +32,49 @@ with st.container():
     """, unsafe_allow_html=True)
 
 # Sidebar API Key Setup
-st.sidebar.header("⚙️ Configuration")
+st.sidebar.header("⚙️ System Configuration")
 api_key = st.sidebar.text_input("Enter Gemini API Key:", type="password")
 
 if not api_key:
-    st.warning("⚠️ Access complete! Please enter your free **Gemini API Key** in the sidebar to activate AI capabilities.")
+    st.warning("⚠️ Please enter your free **Gemini API Key** in the sidebar to activate all AI modules.")
 else:
     genai.configure(api_key=api_key)
     model = genai.GenerativeModel('gemini-1.5-flash')
 
-    # Main Navigation Modules
+    # =========================================================
+    # CHAT SECTION: "Where should we start?"
+    # =========================================================
+    st.markdown("### 💬 AI Interactive Chat Assistant")
+    st.markdown("<p style='color: #64748B;'>Where should we start? Ask anything or chat with your AI partner below:</p>", unsafe_allow_html=True)
+
+    # Initialize chat history in session state
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
+
+    # Display chat history
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+
+    # Chat input box
+    if user_chat_input := st.chat_input("Where should we start? Type your query here..."):
+        st.session_state.messages.append({"role": "user", "content": user_chat_input})
+        with st.chat_message("user"):
+            st.markdown(user_chat_input)
+
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking..."):
+                chat_prompt = f"You are A3 QC AI Assistant built by Team 48, Punjab College Quaid Campus. Answer helpfully: {user_chat_input}"
+                chat_res = model.generate_content(chat_prompt)
+                st.markdown(chat_res.text)
+                st.session_state.messages.append({"role": "assistant", "content": chat_res.text})
+
     st.write("---")
-    st.subheader("🎯 Choose an AI Module to Begin")
+
+    # =========================================================
+    # MODULES SECTION
+    # =========================================================
+    st.subheader("🎯 Choose Your AI Module")
     
     selected_module = st.radio(
         "Select Module:",
