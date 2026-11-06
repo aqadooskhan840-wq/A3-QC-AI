@@ -89,8 +89,8 @@ if not api_key:
     st.warning("⚠️ Please enter your free **Gemini API Key** in the sidebar to activate all AI modules.")
 else:
     genai.configure(api_key=api_key)
-    # Updated model to prevent NotFound exceptions
-    model = genai.GenerativeModel('gemini-2.5-flash')
+    # Using the standard stable gemini-1.5-flash model
+    model = genai.GenerativeModel('gemini-1.5-flash')
 
     # =========================================================
     # CHAT SECTION: "Where should we start?"
